@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">United Airlines</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="user_name">Gokul Nath</string>
+    <string name="user_email">gokulnath@ua.com</string>
+
+</resources>

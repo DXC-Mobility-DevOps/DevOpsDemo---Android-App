@@ -1,0 +1,199 @@
+apply plugin: 'com.android.application'
+apply plugin: 'sonar-runner'
+apply plugin: 'jacoco'
+apply plugin: 'spoon'
+
+def appVersionName() {
+    return "1.0.0"
+}
+
+def appVersionCode() {
+    return 1
+}
+
+def appName() {
+    return "UntedAirlines"
+}
+
+def getTestMaxParallelForks() {
+    if (System.getenv("GRADLE_TEST_MAX_FORKS") != null) {
+        return System.getenv("GRADLE_TEST_MAX_FORKS").toInteger()
+    }
+    return 3;
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "22.0.1"
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "2048M"
+    }
+    defaultConfig {
+        applicationId "com.hpe.devops"
+        minSdkVersion 16
+        targetSdkVersion 21
+        versionName appVersionName()
+        versionCode appVersionCode()
+
+        multiDexEnabled false
+
+        buildConfigField "String", "FLAVOR_DEV", "\"dev\""
+        buildConfigField "String", "FLAVOR_PROD", "\"prod\""
+        setProperty("archivesBaseName", appName())
+    }
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(
+                    output.outputFile.parent,
+                    output.outputFile.name.replace(".apk", "-${variant.versionName}_${variant.versionCode}.apk"))
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+        dev {
+
+        }
+
+        prod {
+
+        }
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+        abortOnError false
+    }
+
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    testOptions {
+        unitTests.all {
+            beforeTest { desc ->
+                println "Executing: ${desc.name} [${desc.className}]"
+            }
+
+            afterTest { desc, result ->
+                println "Result: ${result.resultType}"
+            }
+        }
+    }
+}
+
+spoon {
+    noAnimations = true
+    debug = true
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
+    compile 'com.android.support:cardview-v7:23.1.1'
+
+    compile 'com.squareup.dagger:dagger:1.2.2'
+    provided 'com.squareup.dagger:dagger-compiler:1.2.2'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.jakewharton.timber:timber:4.1.0'
+
+    testCompile('com.squareup.assertj:assertj-android:1.1.0') {
+        exclude group: 'com.android.support'
+    }
+
+    testCompile('org.robolectric:robolectric:3.0') {
+        exclude group: 'commons-logging', module: 'commons-logging'
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+    }
+    testCompile "org.mockito:mockito-core:1.10.19"
+
+    testCompile('junit:junit:4.12') {
+        exclude module: 'hamcrest-core'
+    }
+
+    testCompile "org.powermock:powermock-module-junit4:1.6.4"
+    testCompile "org.powermock:powermock-module-junit4-rule:1.6.4"
+    testCompile "org.powermock:powermock-api-mockito:1.6.4"
+    testCompile "org.powermock:powermock-classloading-xstream:1.6.4"
+
+
+    androidTestCompile('com.android.support.test:runner:0.4.1') {
+        exclude module: 'support-annotations'
+    }
+
+    androidTestCompile 'com.squareup.spoon:spoon-client:1.3.1'
+    androidTestCompile "org.mockito:mockito-core:1.10.19"
+}
+
+tasks.withType(Test) {
+    maxHeapSize = "2048m"
+    jvmArgs += "-XX:MaxPermSize=512m"
+    forkEvery 50
+    maxParallelForks getTestMaxParallelForks()
+}
+
+sonarRunner {
+    sonarProperties {
+        property "sonar.host.url", "http://localhost:9000"
+        property "sonar.jdbc.username", "sonar"
+        property "sonar.jdbc.password", "sonar"
+        property "sonar.jdbc.url", "jdbc:h2:tcp://localhost:9092/sonar"
+        property "sonar.login", "admin"
+        property "sonar.password", "admin"
+        property "sonar.projectKey", "DevOps"
+        property "sonar.projectName", "DevOps"
+        property "sonar.projectVersion", appName() + "-" + appVersionName() + "_" + appVersionCode()
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.dynamicAnalysis", "reuseReports"
+        property "sonar.jacoco.reportPath", "$buildDir/jacoco/testDevDebugUnitTest.exec"
+        property "sonar.sources", "src/main/java"
+        property "sonar.inclusions", ['**/devops/**']
+        property "sonar.test", "src/test/java"
+        property "sonar.binaries", "$buildDir/intermediates/classes/dev/debug"
+        property "sonar.junit.reportsPath", "$buildDir/test-results/dev/debug"
+        property "sonar.profile", "DevOps"
+        property "sonar.verbose", "true"
+    }
+}
+
+def coverageSourceDirs = [
+        'src/main/java'
+]
+
+task testDebugJacoco(type: JacocoReport, dependsOn: "testDevDebugUnitTest") {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+    classDirectories = fileTree(
+            dir: './build/intermediates/classes/dev/debug',
+            excludes: ['**/R*.class'])
+    sourceDirectories = files(coverageSourceDirs)
+    executionData = files("$buildDir/jacoco/testDevDebugUnitTest.exec")
+    // Bit hacky but fixes https://code.google.com/p/android/issues/detail?id=69174.
+    // We iterate through the compiled .class tree and rename $$ to $.
+    doFirst {
+        new File("$buildDir/intermediates/classes/").eachFileRecurse { file ->
+            if (file.name.contains('$$')) {
+                file.renameTo(file.path.replace('$$', '$'))
+            }
+        }
+    }
+}
+
+repositories {
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+}
