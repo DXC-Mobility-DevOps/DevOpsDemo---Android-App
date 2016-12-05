@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "458372300812",
+    "firebase_url": "https://devops-eb67f.firebaseio.com",
+    "project_id": "devops-eb67f",
+    "storage_bucket": "devops-eb67f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458372300812:android:5cf0ee8f35c58d31",
+        "android_client_info": {
+          "package_name": "com.hpe.devops"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "458372300812-td16q777homl03itorh0o28gcssnc4af.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAg6DoVeq6J1gFEPQo8ueN5qcp_JrEfJLo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
