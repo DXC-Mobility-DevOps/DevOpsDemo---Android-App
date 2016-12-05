@@ -13,6 +13,21 @@
             <set />
           </value>
         </entry>
+        <entry key="C:/AIMIA/Source/aeroplan-android/app/build.gradle">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="C:/AIMIA/Source/aeroplan-android/app/src/dev/java/com/aimia/aeroplan/config/Endpoint.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="C:/AIMIA/Source/aeroplan-android/app/src/uat/java/com/aimia/aeroplan/config/Endpoint.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/build.gradle">
           <value>
             <set />
