@@ -12,7 +12,7 @@ def appVersionCode() {
 }
 
 def appName() {
-    return "UntedAirlines"
+    return "HPEDevOps"
 }
 
 def getTestMaxParallelForks() {
