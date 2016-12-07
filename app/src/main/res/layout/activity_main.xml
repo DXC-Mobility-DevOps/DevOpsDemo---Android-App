@@ -160,7 +160,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/card_view5"
