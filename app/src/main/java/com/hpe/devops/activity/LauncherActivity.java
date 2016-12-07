@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.firebase.crash.FirebaseCrash;
 import com.hpe.devops.R;
 import com.hpe.devops.application.DevOpsApplication;
 
@@ -36,9 +35,6 @@ public class LauncherActivity extends AppCompatActivity
 
         View offerContainer = findViewById(R.id.container_offer);
         offerContainer.setOnClickListener(this);
-
-        FirebaseCrash.log("Launcher Activity Created!");
-        FirebaseCrash.report(new Exception("Sample Crash Message"));
     }
 
     @Override
