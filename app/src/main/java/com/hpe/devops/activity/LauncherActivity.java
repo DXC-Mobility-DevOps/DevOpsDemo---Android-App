@@ -8,12 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.hpe.devops.R;
 import com.hpe.devops.application.DevOpsApplication;
 
 public class LauncherActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,9 @@ public class LauncherActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View offerContainer = findViewById(R.id.container_offer);
+        offerContainer.setOnClickListener(this);
     }
 
     @Override
@@ -49,5 +53,18 @@ public class LauncherActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Do Nothing. Just Demo.
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.container_offer:
+                crashApp();
+                break;
+        }
+    }
+
+    private void crashApp() {
+        Integer.parseInt(null);
     }
 }
