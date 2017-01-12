@@ -31,7 +31,7 @@ public class LauncherActivityTest {
 
     @Test
     public void onCreate_shouldSetTitle() throws Exception {
-        assertThat(launcherActivity.getTitle()).isEqualTo("HPE DevOps");
+        assertThat(launcherActivity.getTitle()).isEqualTo("DevOps");
     }
 
     @Test
