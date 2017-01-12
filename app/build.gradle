@@ -12,7 +12,7 @@ def appVersionCode() {
 }
 
 def appName() {
-    return "HPEDevOps"
+    return "DevOps"
 }
 
 def getTestMaxParallelForks() {
